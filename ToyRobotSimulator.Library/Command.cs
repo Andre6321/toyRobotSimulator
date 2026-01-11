@@ -3,22 +3,15 @@ namespace ToyRobotSimulator.Library
     /// <summary>
     /// Represents a parsed command with its type and arguments.
     /// </summary>
-    public class Command
-    {
-        public CommandType Type { get; }
-        public int? X { get; }
-        public int? Y { get; }
-        public Direction? Direction { get; }
+    public record Command(
+        CommandType Type,
+        int? X = null,
+        int? Y = null,
+        Direction? Direction = null);
 
-        public Command(CommandType type, int? x = null, int? y = null, Direction? direction = null)
-        {
-            Type = type;
-            X = x;
-            Y = y;
-            Direction = direction;
-        }
-    }
-
+    /// <summary>
+    /// The types of commands that can be executed.
+    /// </summary>
     public enum CommandType
     {
         PLACE,

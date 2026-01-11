@@ -1,9 +1,11 @@
 namespace ToyRobotSimulator.Library
 {
+    using Dir = Direction;  // Alias to avoid name collision with property
+
     /// <summary>
     /// Represents the toy robot with its position and direction.
     /// </summary>
-    public class Robot
+    public class Robot : IRobot
     {
         private Position? _position;
         private Direction? _direction;
@@ -51,12 +53,12 @@ namespace ToyRobotSimulator.Library
             if (!IsPlaced || _direction == null)
                 return;
 
-            _direction = _direction switch
+            _direction = _direction.Value switch
             {
-                Library.Direction.NORTH => Library.Direction.WEST,
-                Library.Direction.WEST => Library.Direction.SOUTH,
-                Library.Direction.SOUTH => Library.Direction.EAST,
-                Library.Direction.EAST => Library.Direction.NORTH,
+                Dir.NORTH => Dir.WEST,
+                Dir.WEST => Dir.SOUTH,
+                Dir.SOUTH => Dir.EAST,
+                Dir.EAST => Dir.NORTH,
                 _ => _direction
             };
         }
@@ -69,12 +71,12 @@ namespace ToyRobotSimulator.Library
             if (!IsPlaced || _direction == null)
                 return;
 
-            _direction = _direction switch
+            _direction = _direction.Value switch
             {
-                Library.Direction.NORTH => Library.Direction.EAST,
-                Library.Direction.EAST => Library.Direction.SOUTH,
-                Library.Direction.SOUTH => Library.Direction.WEST,
-                Library.Direction.WEST => Library.Direction.NORTH,
+                Dir.NORTH => Dir.EAST,
+                Dir.EAST => Dir.SOUTH,
+                Dir.SOUTH => Dir.WEST,
+                Dir.WEST => Dir.NORTH,
                 _ => _direction
             };
         }
@@ -88,12 +90,12 @@ namespace ToyRobotSimulator.Library
             if (!IsPlaced || _position == null || _direction == null)
                 return null;
 
-            return _direction switch
+            return _direction.Value switch
             {
-                Library.Direction.NORTH => new Position(_position.X, _position.Y + 1),
-                Library.Direction.EAST => new Position(_position.X + 1, _position.Y),
-                Library.Direction.SOUTH => new Position(_position.X, _position.Y - 1),
-                Library.Direction.WEST => new Position(_position.X - 1, _position.Y),
+                Dir.NORTH => new Position(_position.X, _position.Y + 1),
+                Dir.EAST => new Position(_position.X + 1, _position.Y),
+                Dir.SOUTH => new Position(_position.X, _position.Y - 1),
+                Dir.WEST => new Position(_position.X - 1, _position.Y),
                 _ => null
             };
         }

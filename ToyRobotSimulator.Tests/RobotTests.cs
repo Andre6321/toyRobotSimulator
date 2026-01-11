@@ -126,32 +126,60 @@ namespace ToyRobotSimulator.Tests
             Assert.Equal(2, nextPosition?.Y);
         }
 
-        [Fact]
-        public void TestTurnLeftFromNorth()
+        [Theory]
+        [InlineData(Direction.NORTH, Direction.WEST)]
+        [InlineData(Direction.WEST, Direction.SOUTH)]
+        [InlineData(Direction.SOUTH, Direction.EAST)]
+        [InlineData(Direction.EAST, Direction.NORTH)]
+        public void TurnLeft_ShouldRotateCounterClockwise(Direction start, Direction expected)
         {
             // Arrange
             var robot = new Robot();
-            robot.Place(new Position(0, 0), Direction.NORTH);
+            robot.Place(new Position(0, 0), start);
 
             // Act
             robot.TurnLeft();
 
             // Assert
-            Assert.Equal(Direction.WEST, robot.Direction);
+            Assert.Equal(expected, robot.Direction);
         }
 
-        [Fact]
-        public void TestTurnRightFromNorth()
+        [Theory]
+        [InlineData(Direction.NORTH, Direction.EAST)]
+        [InlineData(Direction.EAST, Direction.SOUTH)]
+        [InlineData(Direction.SOUTH, Direction.WEST)]
+        [InlineData(Direction.WEST, Direction.NORTH)]
+        public void TurnRight_ShouldRotateClockwise(Direction start, Direction expected)
         {
             // Arrange
             var robot = new Robot();
-            robot.Place(new Position(0, 0), Direction.NORTH);
+            robot.Place(new Position(0, 0), start);
 
             // Act
             robot.TurnRight();
 
             // Assert
-            Assert.Equal(Direction.EAST, robot.Direction);
+            Assert.Equal(expected, robot.Direction);
+        }
+
+        [Theory]
+        [InlineData(Direction.NORTH, 2, 3)]
+        [InlineData(Direction.EAST, 3, 2)]
+        [InlineData(Direction.SOUTH, 2, 1)]
+        [InlineData(Direction.WEST, 1, 2)]
+        public void GetNextPosition_ShouldCalculateCorrectPosition(Direction direction, int expectedX, int expectedY)
+        {
+            // Arrange
+            var robot = new Robot();
+            robot.Place(new Position(2, 2), direction);
+
+            // Act
+            var nextPosition = robot.GetNextPosition();
+
+            // Assert
+            Assert.NotNull(nextPosition);
+            Assert.Equal(expectedX, nextPosition?.X);
+            Assert.Equal(expectedY, nextPosition?.Y);
         }
 
         [Fact]
@@ -181,6 +209,47 @@ namespace ToyRobotSimulator.Tests
 
             // Assert
             Assert.False(robot.IsPlaced);
+        }
+
+        [Fact]
+        public void TurnLeft_WhenNotPlaced_ShouldDoNothing()
+        {
+            // Arrange
+            var robot = new Robot();
+
+            // Act
+            robot.TurnLeft();
+
+            // Assert
+            Assert.False(robot.IsPlaced);
+            Assert.Null(robot.Direction);
+        }
+
+        [Fact]
+        public void TurnRight_WhenNotPlaced_ShouldDoNothing()
+        {
+            // Arrange
+            var robot = new Robot();
+
+            // Act
+            robot.TurnRight();
+
+            // Assert
+            Assert.False(robot.IsPlaced);
+            Assert.Null(robot.Direction);
+        }
+
+        [Fact]
+        public void GetNextPosition_WhenNotPlaced_ShouldReturnNull()
+        {
+            // Arrange
+            var robot = new Robot();
+
+            // Act
+            var nextPosition = robot.GetNextPosition();
+
+            // Assert
+            Assert.Null(nextPosition);
         }
     }
 }

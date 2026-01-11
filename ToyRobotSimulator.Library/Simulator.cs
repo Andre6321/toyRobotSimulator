@@ -3,14 +3,11 @@ namespace ToyRobotSimulator.Library
     /// <summary>
     /// Simulates the toy robot on a tabletop.
     /// </summary>
-    public class Simulator
+    public class Simulator : ISimulator
     {
-        private readonly Robot _robot;
-        private readonly CommandParser _parser;
-        private readonly int _minX;
-        private readonly int _minY;
-        private readonly int _maxX;
-        private readonly int _maxY;
+        private readonly IRobot _robot;
+        private readonly ICommandParser _parser;
+        private readonly ITable _table;
 
         /// <summary>
         /// Creates a new simulator with the specified table dimensions.
@@ -20,19 +17,29 @@ namespace ToyRobotSimulator.Library
         /// <param name="maxX">Maximum X coordinate (default: 5)</param>
         /// <param name="maxY">Maximum Y coordinate (default: 5)</param>
         public Simulator(int minX = 0, int minY = 0, int maxX = 5, int maxY = 5)
+            : this(new Robot(), new CommandParser(), new Table(minX, minY, maxX, maxY))
         {
-            _robot = new Robot();
-            _parser = new CommandParser();
-            _minX = minX;
-            _minY = minY;
-            _maxX = maxX;
-            _maxY = maxY;
+        }
+
+        /// <summary>
+        /// Creates a new simulator with injectable dependencies (for testing).
+        /// </summary>
+        public Simulator(IRobot robot, ICommandParser parser, ITable table)
+        {
+            _robot = robot;
+            _parser = parser;
+            _table = table;
         }
 
         /// <summary>
         /// Gets the robot being simulated.
         /// </summary>
-        public Robot Robot => _robot;
+        public IRobot Robot => _robot;
+
+        /// <summary>
+        /// Gets the table the robot is on.
+        /// </summary>
+        public ITable Table => _table;
 
         /// <summary>
         /// Executes a command string and returns the result (if any).
@@ -66,7 +73,7 @@ namespace ToyRobotSimulator.Library
             var position = new Position(command.X.Value, command.Y.Value);
             
             // Validate position is within bounds
-            if (!position.IsWithinBounds(_minX, _minY, _maxX, _maxY))
+            if (!_table.IsValidPosition(position))
                 return null;
 
             _robot.Place(position, command.Direction.Value);
@@ -85,7 +92,7 @@ namespace ToyRobotSimulator.Library
             var position = new Position(command.X.Value, command.Y.Value);
             
             // Validate position is within bounds
-            if (!position.IsWithinBounds(_minX, _minY, _maxX, _maxY))
+            if (!_table.IsValidPosition(position))
                 return null;
 
             _robot.PlaceAt(position);
@@ -102,7 +109,7 @@ namespace ToyRobotSimulator.Library
                 return null;
 
             // Only move if the next position is within bounds
-            if (nextPosition.IsWithinBounds(_minX, _minY, _maxX, _maxY))
+            if (_table.IsValidPosition(nextPosition))
             {
                 _robot.PlaceAt(nextPosition);
             }

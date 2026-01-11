@@ -16,11 +16,15 @@ namespace ToyRobotSimulator.Tests
             Assert.Equal(4, position.Y);
         }
 
-        [Fact]
-        public void TestIsWithinBounds_InsideBounds()
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(3, 3)]
+        [InlineData(5, 5)]
+        [InlineData(2, 4)]
+        public void IsWithinBounds_InsideBounds_ReturnsTrue(int x, int y)
         {
             // Arrange
-            var position = new Position(3, 3);
+            var position = new Position(x, y);
 
             // Act
             var result = position.IsWithinBounds(0, 0, 5, 5);
@@ -29,32 +33,20 @@ namespace ToyRobotSimulator.Tests
             Assert.True(result);
         }
 
-        [Fact]
-        public void TestIsWithinBounds_OnBoundary()
+        [Theory]
+        [InlineData(-1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(6, 0)]
+        [InlineData(0, 6)]
+        [InlineData(-1, -1)]
+        [InlineData(6, 6)]
+        public void IsWithinBounds_OutsideBounds_ReturnsFalse(int x, int y)
         {
             // Arrange
-            var position1 = new Position(0, 0);
-            var position2 = new Position(5, 5);
+            var position = new Position(x, y);
 
             // Act & Assert
-            Assert.True(position1.IsWithinBounds(0, 0, 5, 5));
-            Assert.True(position2.IsWithinBounds(0, 0, 5, 5));
-        }
-
-        [Fact]
-        public void TestIsWithinBounds_OutsideBounds()
-        {
-            // Arrange
-            var position1 = new Position(-1, 0);
-            var position2 = new Position(0, -1);
-            var position3 = new Position(6, 0);
-            var position4 = new Position(0, 6);
-
-            // Act & Assert
-            Assert.False(position1.IsWithinBounds(0, 0, 5, 5));
-            Assert.False(position2.IsWithinBounds(0, 0, 5, 5));
-            Assert.False(position3.IsWithinBounds(0, 0, 5, 5));
-            Assert.False(position4.IsWithinBounds(0, 0, 5, 5));
+            Assert.False(position.IsWithinBounds(0, 0, 5, 5));
         }
 
         [Fact]
@@ -71,20 +63,31 @@ namespace ToyRobotSimulator.Tests
         }
 
         [Fact]
-        public void TestEquality()
+        public void RecordEquality_SameValues_AreEqual()
         {
             // Arrange
             var position1 = new Position(2, 3);
             var position2 = new Position(2, 3);
-            var position3 = new Position(3, 2);
 
             // Act & Assert
-            Assert.True(position1.Equals(position2));
-            Assert.False(position1.Equals(position3));
+            Assert.Equal(position1, position2);
+            Assert.True(position1 == position2);
         }
 
         [Fact]
-        public void TestGetHashCode()
+        public void RecordEquality_DifferentValues_AreNotEqual()
+        {
+            // Arrange
+            var position1 = new Position(2, 3);
+            var position2 = new Position(3, 2);
+
+            // Act & Assert
+            Assert.NotEqual(position1, position2);
+            Assert.True(position1 != position2);
+        }
+
+        [Fact]
+        public void RecordHashCode_SameValues_SameHashCode()
         {
             // Arrange
             var position1 = new Position(2, 3);

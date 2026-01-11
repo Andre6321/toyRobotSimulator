@@ -3,7 +3,7 @@ namespace ToyRobotSimulator.Library
     /// <summary>
     /// Parses command strings into Command objects.
     /// </summary>
-    public class CommandParser
+    public class CommandParser : ICommandParser
     {
         /// <summary>
         /// Parses a command string into a Command object.
