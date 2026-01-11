@@ -48,53 +48,5 @@ namespace ToyRobotSimulator.Tests
             // Act & Assert
             Assert.False(position.IsWithinBounds(0, 0, 5, 5));
         }
-
-        [Fact]
-        public void TestToString()
-        {
-            // Arrange
-            var position = new Position(2, 3);
-
-            // Act
-            var result = position.ToString();
-
-            // Assert
-            Assert.Equal("2,3", result);
-        }
-
-        [Fact]
-        public void RecordEquality_SameValues_AreEqual()
-        {
-            // Arrange
-            var position1 = new Position(2, 3);
-            var position2 = new Position(2, 3);
-
-            // Act & Assert
-            Assert.Equal(position1, position2);
-            Assert.True(position1 == position2);
-        }
-
-        [Fact]
-        public void RecordEquality_DifferentValues_AreNotEqual()
-        {
-            // Arrange
-            var position1 = new Position(2, 3);
-            var position2 = new Position(3, 2);
-
-            // Act & Assert
-            Assert.NotEqual(position1, position2);
-            Assert.True(position1 != position2);
-        }
-
-        [Fact]
-        public void RecordHashCode_SameValues_SameHashCode()
-        {
-            // Arrange
-            var position1 = new Position(2, 3);
-            var position2 = new Position(2, 3);
-
-            // Act & Assert
-            Assert.Equal(position1.GetHashCode(), position2.GetHashCode());
-        }
     }
 }

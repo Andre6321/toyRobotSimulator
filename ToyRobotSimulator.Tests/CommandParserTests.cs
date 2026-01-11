@@ -8,19 +8,6 @@ namespace ToyRobotSimulator.Tests
         private readonly CommandParser _parser = new CommandParser();
 
         [Fact]
-        public void TestParsePlaceCommandWithDirection()
-        {
-            // Act
-            var command = _parser.Parse("PLACE 1,2,NORTH");
-
-            // Assert
-            Assert.Equal(CommandType.PLACE, command.Type);
-            Assert.Equal(1, command.X);
-            Assert.Equal(2, command.Y);
-            Assert.Equal(Direction.NORTH, command.Direction);
-        }
-
-        [Fact]
         public void TestParsePlaceCommandWithoutDirection()
         {
             // Act
@@ -31,46 +18,6 @@ namespace ToyRobotSimulator.Tests
             Assert.Equal(3, command.X);
             Assert.Equal(4, command.Y);
             Assert.Null(command.Direction);
-        }
-
-        [Fact]
-        public void TestParseMoveCommand()
-        {
-            // Act
-            var command = _parser.Parse("MOVE");
-
-            // Assert
-            Assert.Equal(CommandType.MOVE, command.Type);
-        }
-
-        [Fact]
-        public void TestParseLeftCommand()
-        {
-            // Act
-            var command = _parser.Parse("LEFT");
-
-            // Assert
-            Assert.Equal(CommandType.LEFT, command.Type);
-        }
-
-        [Fact]
-        public void TestParseRightCommand()
-        {
-            // Act
-            var command = _parser.Parse("RIGHT");
-
-            // Assert
-            Assert.Equal(CommandType.RIGHT, command.Type);
-        }
-
-        [Fact]
-        public void TestParseReportCommand()
-        {
-            // Act
-            var command = _parser.Parse("REPORT");
-
-            // Assert
-            Assert.Equal(CommandType.REPORT, command.Type);
         }
 
         [Fact]

@@ -16,9 +16,6 @@ namespace ToyRobotSimulator.Library
                 return new Command(CommandType.INVALID);
 
             var parts = commandString.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length == 0)
-                return new Command(CommandType.INVALID);
-
             var commandName = parts[0].ToUpper();
 
             return commandName switch
